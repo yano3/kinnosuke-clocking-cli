@@ -5,7 +5,7 @@ test: deps
 	go test -v
 
 build: deps
-	gox -osarch="darwin/amd64 linux/amd64" -output="pkg/{{.OS}}_{{.Arch}}/{{.Dir}}"
+	goxz -os=darwin,linux,windows -arch=amd64 -d=dist -z
 
 lint:
 	golint ./...
