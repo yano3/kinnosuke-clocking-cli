@@ -36,11 +36,7 @@ func choise() bool {
 	return result
 }
 
-func main() {
-
-	clockingOut := flag.Bool("out", false, "Clocking out")
-	flag.Parse()
-
+func attendance(clockingOut *bool) {
 	var clockingId string
 	if *clockingOut {
 		clockingId = clockingIdOut
@@ -71,6 +67,19 @@ func main() {
 	if timeRecorderForm.Submit() != nil {
 		panic(err)
 	}
+}
 
-	fmt.Println("Success")
+func main() {
+
+	answer := choise()
+	if answer {
+		clockingOut := flag.Bool("out", false, "Clocking out")
+		flag.Parse()
+
+		attendance(clockingOut)
+
+		fmt.Println("Success")
+	} else {
+		fmt.Println("Cancel")
+	}
 }
