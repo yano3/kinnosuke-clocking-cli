@@ -3,14 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gopkg.in/headzoo/surf.v1"
 	"os"
+
+	"gopkg.in/headzoo/surf.v1"
 )
 
-const kinnosukeUrl = "https://www.4628.jp/"
-const ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
-const clockingIdIn = "1"
-const clockingIdOut = "2"
+const kinnosukeUrl string = "https://www.4628.jp/"
+const ua string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+const clockingIdIn string = "1"
+const clockingIdOut string = "2"
 
 func main() {
 
