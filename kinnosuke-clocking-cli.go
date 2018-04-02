@@ -27,6 +27,8 @@ func choise() bool {
 		} else if i == "N" || i == "n" {
 			result = false
 			break
+		} else {
+			fmt.Println("Please answer Y or n")
 		}
 	}
 
