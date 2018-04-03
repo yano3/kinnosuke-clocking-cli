@@ -15,6 +15,14 @@ Clocking out
 kinnosuke-clocking-cli -out
 ```
 
+## Installation
+
+Download binary from [releases page](https://github.com/yano3/kinnosuke-clocking-cli/releases) or use `go get` command.
+
+```console
+$ go get -u github.com/yano3/kinnosuke-clocking-cli
+```
+
 ## Configuration
 
 Set environment variables bellow.
