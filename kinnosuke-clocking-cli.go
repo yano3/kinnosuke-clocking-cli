@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/Songmu/prompter"
 	"gopkg.in/headzoo/surf.v1"
@@ -45,6 +46,18 @@ func attendance(clockingOut *bool) {
 	if timeRecorderForm.Submit() != nil {
 		panic(err)
 	}
+
+	selection := browser.Find("#timerecorder_txt")
+	reg := regexp.MustCompile(`\d\d:\d\d`)
+
+	clockInTime := reg.FindString(selection.Eq(0).Text())
+	clockOutTime := reg.FindString(selection.Eq(1).Text())
+
+	if *clockingOut {
+		fmt.Println(clockOutTime)
+	} else {
+		fmt.Println(clockInTime)
+	}
 }
 
 func main() {
@@ -54,7 +67,6 @@ func main() {
 
 	if *skipPrompt || prompter.YN("OK?", true) {
 		attendance(clockingOut)
-		fmt.Println("Success")
 	} else {
 		fmt.Println("Canceled")
 	}
