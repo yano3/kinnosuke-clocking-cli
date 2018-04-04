@@ -19,10 +19,8 @@ func attendance(clockingOut *bool) {
 	var clockingId string
 	if *clockingOut {
 		clockingId = clockingIdOut
-		fmt.Println("Clocking out...")
 	} else {
 		clockingId = clockingIdIn
-		fmt.Println("Clocking in...")
 	}
 
 	browser := surf.NewBrowser()
