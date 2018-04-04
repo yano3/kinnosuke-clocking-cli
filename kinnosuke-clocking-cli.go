@@ -52,7 +52,7 @@ func attendance(clockingOut *bool) {
 	clockOutTime := reg.FindString(selection.Eq(1).Text())
 
 	if *clockingOut {
-		fmt.Println(clockOutTime)
+		fmt.Printf("%s %s\n", clockInTime, clockOutTime)
 	} else {
 		fmt.Println(clockInTime)
 	}
