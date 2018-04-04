@@ -48,10 +48,11 @@ func attendance(clockingOut *bool) {
 }
 
 func main() {
-	if prompter.YN("OK?", false) {
-		clockingOut := flag.Bool("out", false, "Clocking out")
-		flag.Parse()
+	clockingOut := flag.Bool("out", false, "Clocking out")
+	skipPrompt := flag.Bool("y", false, "Skip y/n prompt")
+	flag.Parse()
 
+	if *skipPrompt || prompter.YN("OK?", true) {
 		attendance(clockingOut)
 		fmt.Println("Success")
 	} else {
