@@ -55,6 +55,6 @@ func main() {
 		attendance(clockingOut)
 		fmt.Println("Success")
 	} else {
-		fmt.Println("Cancel")
+		fmt.Println("Canceled")
 	}
 }
