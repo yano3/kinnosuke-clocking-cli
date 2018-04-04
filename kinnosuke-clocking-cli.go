@@ -52,7 +52,7 @@ func main() {
 	skipPrompt := flag.Bool("y", false, "Skip y/n prompt")
 	flag.Parse()
 
-	if *skipPrompt || prompter.YN("OK?", false) {
+	if *skipPrompt || prompter.YN("OK?", true) {
 		attendance(clockingOut)
 		fmt.Println("Success")
 	} else {
