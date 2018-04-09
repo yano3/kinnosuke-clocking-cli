@@ -15,7 +15,7 @@ const ua string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/5
 const clockingIdIn string = "1"
 const clockingIdOut string = "2"
 
-func attendance(clockingOut *bool) {
+func attendance(clockingOut *bool) bool {
 	var clockingId string
 	if *clockingOut {
 		clockingId = clockingIdOut
@@ -39,6 +39,13 @@ func attendance(clockingOut *bool) {
 		panic(err)
 	}
 
+	// check if operated from internal network
+	mes := browser.Find(".txt_12_red").Text()
+	if len(mes) > 0 {
+		fmt.Println(mes)
+		return false
+	}
+
 	timeRecorderForm, _ := browser.Form("[id='tr_submit_form']")
 	timeRecorderForm.Input("timerecorder_stamping_type", clockingId)
 	if timeRecorderForm.Submit() != nil {
@@ -56,6 +63,8 @@ func attendance(clockingOut *bool) {
 	} else {
 		fmt.Println(clockInTime)
 	}
+
+	return true
 }
 
 func main() {
@@ -64,7 +73,9 @@ func main() {
 	flag.Parse()
 
 	if *skipPrompt || prompter.YN("OK?", true) {
-		attendance(clockingOut)
+		if !attendance(clockingOut) {
+			os.Exit(10)
+		}
 	} else {
 		fmt.Println("Canceled")
 	}
