@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"regexp"
 
@@ -14,6 +15,19 @@ const kinnosukeUrl string = "https://www.4628.jp/"
 const ua string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
 const clockingIdIn string = "1"
 const clockingIdOut string = "2"
+
+// Exit codes are int values that represent an exit code for a particular error.
+const (
+	ExitCodeOK    int = 0
+	ExitCodeError int = 1 + iota
+)
+
+// CLI is the command line object
+type CLI struct {
+	// outStream and errStream are the stdout and stderr
+	// to write message from the CLI.
+	outStream, errStream io.Writer
+}
 
 func attendance(clockingOut *bool) bool {
 	var clockingId string
@@ -67,16 +81,18 @@ func attendance(clockingOut *bool) bool {
 	return true
 }
 
-func main() {
+func (cli *CLI) Run(args []string) int {
 	clockingOut := flag.Bool("out", false, "Clocking out")
 	skipPrompt := flag.Bool("y", false, "Skip y/n prompt")
 	flag.Parse()
 
 	if *skipPrompt || prompter.YN("OK?", true) {
 		if !attendance(clockingOut) {
-			os.Exit(10)
+			return ExitCodeError
 		}
 	} else {
 		fmt.Println("Canceled")
 	}
+
+	return ExitCodeOK
 }
