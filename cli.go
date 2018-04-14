@@ -29,9 +29,9 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
-func attendance(clockingOut *bool) bool {
+func attendance(clockingOut bool) bool {
 	var clockingId string
-	if *clockingOut {
+	if clockingOut {
 		clockingId = clockingIdOut
 	} else {
 		clockingId = clockingIdIn
@@ -72,7 +72,7 @@ func attendance(clockingOut *bool) bool {
 	clockInTime := reg.FindString(selection.Eq(0).Text())
 	clockOutTime := reg.FindString(selection.Eq(1).Text())
 
-	if *clockingOut {
+	if clockingOut {
 		fmt.Printf("%s %s\n", clockInTime, clockOutTime)
 	} else {
 		fmt.Println(clockInTime)
@@ -82,12 +82,31 @@ func attendance(clockingOut *bool) bool {
 }
 
 func (cli *CLI) Run(args []string) int {
-	clockingOut := flag.Bool("out", false, "Clocking out")
-	skipPrompt := flag.Bool("y", false, "Skip y/n prompt")
-	flag.Parse()
+	var (
+		yes bool
+		out bool
 
-	if *skipPrompt || prompter.YN("OK?", true) {
-		if !attendance(clockingOut) {
+		version bool
+	)
+
+	// Define option flag parse
+	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
+	flags.SetOutput(cli.errStream)
+
+	flags.BoolVar(&yes, "yes", false, "Skip y/n prompt")
+	flags.BoolVar(&yes, "y", false, "Skip y/n prompt (Short)")
+	flags.BoolVar(&out, "out", false, "Clocking out")
+	flags.BoolVar(&out, "o", false, "Clocking out (Short)")
+
+	flags.BoolVar(&version, "version", false, "Print version information and quit.")
+
+	// Parse commandline flag
+	if err := flags.Parse(args[1:]); err != nil {
+		return ExitCodeError
+	}
+
+	if yes || prompter.YN("OK?", true) {
+		if !attendance(out) {
 			return ExitCodeError
 		}
 	} else {
