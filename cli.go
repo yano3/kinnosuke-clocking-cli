@@ -105,6 +105,12 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeError
 	}
 
+	// Show version
+	if version {
+		fmt.Fprintf(cli.errStream, "%s version %s\n", Name, Version)
+		return ExitCodeOK
+	}
+
 	if yes || prompter.YN("OK?", true) {
 		if !attendance(out) {
 			return ExitCodeError
