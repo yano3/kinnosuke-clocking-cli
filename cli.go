@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -29,7 +30,7 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
-func attendance(clockingOut bool) bool {
+func attendance(clockingOut bool) error {
 	var clockingId string
 	if clockingOut {
 		clockingId = clockingIdOut
@@ -57,7 +58,7 @@ func attendance(clockingOut bool) bool {
 	mes := browser.Find(".txt_12_red").Text()
 	if len(mes) > 0 {
 		fmt.Println(mes)
-		return false
+		return errors.New(mes)
 	}
 
 	timeRecorderForm, _ := browser.Form("[id='tr_submit_form']")
@@ -78,7 +79,7 @@ func attendance(clockingOut bool) bool {
 		fmt.Println(clockInTime)
 	}
 
-	return true
+	return nil
 }
 
 func (cli *CLI) Run(args []string) int {
@@ -112,7 +113,9 @@ func (cli *CLI) Run(args []string) int {
 	}
 
 	if yes || prompter.YN("OK?", true) {
-		if !attendance(out) {
+		err :=  attendance(out)
+		if err != nil {
+			fmt.Println(err)
 			return ExitCodeError
 		}
 	} else {
