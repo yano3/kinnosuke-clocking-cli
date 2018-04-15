@@ -57,7 +57,6 @@ func attendance(clockingOut bool) error {
 	// check if operated from internal network
 	mes := browser.Find(".txt_12_red").Text()
 	if len(mes) > 0 {
-		fmt.Println(mes)
 		return errors.New(mes)
 	}
 
