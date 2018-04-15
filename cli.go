@@ -30,7 +30,7 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
-func attendance(clockingOut bool) error {
+func clockIn(clockingOut bool) error {
 	var clockingId string
 	if clockingOut {
 		clockingId = clockingIdOut
@@ -115,7 +115,7 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeError
 	}
 
-	err := attendance(out)
+	err := clockIn(out)
 	if err != nil {
 		fmt.Println(err)
 		return ExitCodeError
