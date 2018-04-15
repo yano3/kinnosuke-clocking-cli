@@ -112,14 +112,15 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-	if yes || prompter.YN("OK?", true) {
-		err :=  attendance(out)
-		if err != nil {
-			fmt.Println(err)
-			return ExitCodeError
-		}
-	} else {
+	if !yes && !prompter.YN("OK?", true) {
 		fmt.Println("Canceled")
+		return ExitCodeError
+	}
+
+	err := attendance(out)
+	if err != nil {
+		fmt.Println(err)
+		return ExitCodeError
 	}
 
 	return ExitCodeOK
