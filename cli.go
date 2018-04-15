@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -29,7 +30,7 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
-func attendance(clockingOut bool) bool {
+func clockIn(clockingOut bool) error {
 	var clockingId string
 	if clockingOut {
 		clockingId = clockingIdOut
@@ -40,30 +41,28 @@ func attendance(clockingOut bool) bool {
 	browser := surf.NewBrowser()
 	browser.SetUserAgent(ua)
 
-	err := browser.Open(kinnosukeUrl)
-	if err != nil {
-		panic(err)
+	if err := browser.Open(kinnosukeUrl); err != nil {
+		return err
 	}
 
 	loginForm, _ := browser.Form("[id='form1']")
 	loginForm.Input("y_companycd", os.Getenv("KINNOSUKE_COMPANYCD"))
 	loginForm.Input("y_logincd", os.Getenv("KINNOSUKE_LOGINCD"))
 	loginForm.Input("password", os.Getenv("KINNOSUKE_PASSWORD"))
-	if loginForm.Submit() != nil {
-		panic(err)
+	if err := loginForm.Submit(); err != nil {
+		return err
 	}
 
 	// check if operated from internal network
 	mes := browser.Find(".txt_12_red").Text()
 	if len(mes) > 0 {
-		fmt.Println(mes)
-		return false
+		return errors.New(mes)
 	}
 
 	timeRecorderForm, _ := browser.Form("[id='tr_submit_form']")
 	timeRecorderForm.Input("timerecorder_stamping_type", clockingId)
-	if timeRecorderForm.Submit() != nil {
-		panic(err)
+	if err := timeRecorderForm.Submit(); err != nil {
+		return err
 	}
 
 	selection := browser.Find("#timerecorder_txt")
@@ -78,7 +77,7 @@ func attendance(clockingOut bool) bool {
 		fmt.Println(clockInTime)
 	}
 
-	return true
+	return nil
 }
 
 func (cli *CLI) Run(args []string) int {
@@ -111,12 +110,15 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-	if yes || prompter.YN("OK?", true) {
-		if !attendance(out) {
-			return ExitCodeError
-		}
-	} else {
+	if !yes && !prompter.YN("OK?", true) {
 		fmt.Println("Canceled")
+		return ExitCodeError
+	}
+
+	err := clockIn(out)
+	if err != nil {
+		fmt.Println(err)
+		return ExitCodeError
 	}
 
 	return ExitCodeOK
