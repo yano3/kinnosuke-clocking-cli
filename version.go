@@ -4,4 +4,4 @@ package main
 const Name string = "kinnosuke-clocking-cli"
 
 // Version is application version
-const Version string = "0.1.3"
+const Version string = "0.1.4"
