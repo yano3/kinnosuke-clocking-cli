@@ -8,4 +8,5 @@ build: deps
 	goxz -os=darwin,linux,windows -arch=amd64 -d=dist -z
 
 lint:
-	golint ./...
+	go vet
+	golint -set_exit_status
