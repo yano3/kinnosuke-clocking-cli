@@ -12,10 +12,10 @@ import (
 	"gopkg.in/headzoo/surf.v1"
 )
 
-const kinnosukeUrl string = "https://www.4628.jp/"
+const kinnosukeURL string = "https://www.4628.jp/"
 const ua string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
-const clockingIdIn string = "1"
-const clockingIdOut string = "2"
+const clockingIDIn string = "1"
+const clockingIDOut string = "2"
 
 // Exit codes are int values that represent an exit code for a particular error.
 const (
@@ -31,17 +31,17 @@ type CLI struct {
 }
 
 func clockIn(clockingOut bool) error {
-	var clockingId string
+	var clockingID string
 	if clockingOut {
-		clockingId = clockingIdOut
+		clockingID = clockingIDOut
 	} else {
-		clockingId = clockingIdIn
+		clockingID = clockingIDIn
 	}
 
 	browser := surf.NewBrowser()
 	browser.SetUserAgent(ua)
 
-	if err := browser.Open(kinnosukeUrl); err != nil {
+	if err := browser.Open(kinnosukeURL); err != nil {
 		return err
 	}
 
@@ -60,7 +60,7 @@ func clockIn(clockingOut bool) error {
 	}
 
 	timeRecorderForm, _ := browser.Form("[id='tr_submit_form']")
-	timeRecorderForm.Input("timerecorder_stamping_type", clockingId)
+	timeRecorderForm.Input("timerecorder_stamping_type", clockingID)
 	if err := timeRecorderForm.Submit(); err != nil {
 		return err
 	}
@@ -80,6 +80,7 @@ func clockIn(clockingOut bool) error {
 	return nil
 }
 
+// Run invokes the CLI with the given arguments.
 func (cli *CLI) Run(args []string) int {
 	var (
 		yes bool
