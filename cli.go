@@ -53,6 +53,11 @@ func clockIn(clockingOut bool) error {
 		return err
 	}
 
+	// confirm logged in
+	if mes := browser.Find(".txt_12 .txt_15_b_message_red").Text(); len(mes) > 0 {
+		return errors.New(mes)
+	}
+
 	// check if operated from internal network
 	mes := browser.Find(".txt_12_red").Text()
 	if len(mes) > 0 {
