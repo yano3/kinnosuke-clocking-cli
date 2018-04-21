@@ -1,4 +1,7 @@
 # kinnosuke-clocking-cli
+
+[![CircleCI](https://circleci.com/gh/yano3/kinnosuke-clocking-cli.svg?style=shield)](https://circleci.com/gh/yano3/kinnosuke-clocking-cli)
+
 Clocking in/out cli for Kinnosuke.
 
 ## Usage
