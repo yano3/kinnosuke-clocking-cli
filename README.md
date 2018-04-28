@@ -1,5 +1,6 @@
 # kinnosuke-clocking-cli
 
+[![GitHub release](https://img.shields.io/github/release/yano3/kinnosuke-clocking-cli.svg)](https://github.com/yano3/kinnosuke-clocking-cli/releases)
 [![CircleCI](https://circleci.com/gh/yano3/kinnosuke-clocking-cli.svg?style=shield)](https://circleci.com/gh/yano3/kinnosuke-clocking-cli)
 
 Clocking in/out cli for Kinnosuke.
