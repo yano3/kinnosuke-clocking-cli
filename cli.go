@@ -85,7 +85,7 @@ func clockIn(clockingOut bool, loginOnly bool) error {
 		if clockOutTime == "" {
 			clockOutTime = "<notyet>"
 		}
-		fmt.Printf("checkin: %s,checkout: %s\n", clockInTime, clockOutTime)
+		fmt.Printf("clockin: %s,clockout: %s\n", clockInTime, clockOutTime)
 	} else {
 		if clockingOut {
 			fmt.Printf("%s %s\n", clockInTime, clockOutTime)
@@ -115,8 +115,8 @@ func (cli *CLI) Run(args []string) int {
 	flags.BoolVar(&yes, "y", false, "Skip y/n prompt (Short)")
 	flags.BoolVar(&out, "out", false, "Clocking out")
 	flags.BoolVar(&out, "o", false, "Clocking out (Short)")
-	flags.BoolVar(&loginOnly, "login-only", false, "Just show checkin/out time and exit")
-	flags.BoolVar(&loginOnly, "n", false, "Just show checkin/out time and exit (Short)")
+	flags.BoolVar(&loginOnly, "login-only", false, "Just show clock in/out time and exit")
+	flags.BoolVar(&loginOnly, "n", false, "Just show clock in/out time and exit (Short)")
 
 	flags.BoolVar(&version, "version", false, "Print version information and quit.")
 
