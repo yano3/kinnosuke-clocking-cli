@@ -85,7 +85,7 @@ func clockIn(clockingOut bool, showStatus bool) error {
 		if clockOutTime == "" {
 			clockOutTime = "<notyet>"
 		}
-		fmt.Printf("clockin: %s,clockout: %s\n", clockInTime, clockOutTime)
+		fmt.Printf("%s %s\n", clockInTime, clockOutTime)
 	} else {
 		if clockingOut {
 			fmt.Printf("%s %s\n", clockInTime, clockOutTime)
