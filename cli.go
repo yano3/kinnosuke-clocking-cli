@@ -30,7 +30,7 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
-func clockIn(clockingOut bool) error {
+func clockIn(clockingOut bool, showStatus bool) error {
 	var clockingID string
 	if clockingOut {
 		clockingID = clockingIDOut
@@ -64,10 +64,12 @@ func clockIn(clockingOut bool) error {
 		return errors.New(mes)
 	}
 
-	timeRecorderForm, _ := browser.Form("[id='tr_submit_form']")
-	timeRecorderForm.Input("timerecorder_stamping_type", clockingID)
-	if err := timeRecorderForm.Submit(); err != nil {
-		return err
+	if !showStatus {
+		timeRecorderForm, _ := browser.Form("[id='tr_submit_form']")
+		timeRecorderForm.Input("timerecorder_stamping_type", clockingID)
+		if err := timeRecorderForm.Submit(); err != nil {
+			return err
+		}
 	}
 
 	selection := browser.Find("#timerecorder_txt")
@@ -76,10 +78,20 @@ func clockIn(clockingOut bool) error {
 	clockInTime := reg.FindString(selection.Eq(0).Text())
 	clockOutTime := reg.FindString(selection.Eq(1).Text())
 
-	if clockingOut {
+	if showStatus {
+		if clockInTime == "" {
+			clockInTime = "<notyet>"
+		}
+		if clockOutTime == "" {
+			clockOutTime = "<notyet>"
+		}
 		fmt.Printf("%s %s\n", clockInTime, clockOutTime)
 	} else {
-		fmt.Println(clockInTime)
+		if clockingOut {
+			fmt.Printf("%s %s\n", clockInTime, clockOutTime)
+		} else {
+			fmt.Println(clockInTime)
+		}
 	}
 
 	return nil
@@ -88,8 +100,9 @@ func clockIn(clockingOut bool) error {
 // Run invokes the CLI with the given arguments.
 func (cli *CLI) Run(args []string) int {
 	var (
-		yes bool
-		out bool
+		yes        bool
+		out        bool
+		showStatus bool
 
 		version bool
 	)
@@ -102,6 +115,8 @@ func (cli *CLI) Run(args []string) int {
 	flags.BoolVar(&yes, "y", false, "Skip y/n prompt (Short)")
 	flags.BoolVar(&out, "out", false, "Clocking out")
 	flags.BoolVar(&out, "o", false, "Clocking out (Short)")
+	flags.BoolVar(&showStatus, "status", false, "Just show clock in/out time and exit")
+	flags.BoolVar(&showStatus, "s", false, "Just show clock in/out time and exit (Short)")
 
 	flags.BoolVar(&version, "version", false, "Print version information and quit.")
 
@@ -121,7 +136,7 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeError
 	}
 
-	err := clockIn(out)
+	err := clockIn(out, showStatus)
 	if err != nil {
 		fmt.Println(err)
 		return ExitCodeError
