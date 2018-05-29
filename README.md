@@ -21,6 +21,17 @@ kinnosuke-clocking-cli -out
 
 ## Installation
 
+### macOS
+
+If you use [Homebrew](https://brew.sh):
+
+```
+brew tap yano3/tap
+brew install kinnosuke-clocking-cli
+```
+
+### Other platforms
+
 Download binary from [releases page](https://github.com/yano3/kinnosuke-clocking-cli/releases) or use `go get` command.
 
 ```console
