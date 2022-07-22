@@ -10,5 +10,6 @@ jobs:
     steps:
       - checkout
 
-      # specify any bash command here prefixed with `run: `
-      - run: make test
+      - run:
+          name: Test
+          command: go test -v
